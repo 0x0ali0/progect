@@ -7,6 +7,7 @@ unsigned char imag[SIZE][SIZE];
 void loadImage();
 void yourFilter();
 void blackAndWhite();
+void InvertImage();
 void saveImage();
 
 int main() {
@@ -51,4 +52,12 @@ void yourFilter() {
             }
 
 
+    }
+ void InvertImage()
+    {
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                imag[i][j]=255-imag[i][j];
+            }
+        }
     }
