@@ -17,6 +17,8 @@ void saveImage();
 void saveImage2();
 void blackAndWhite();
 void flibImage();
+void rotateImage(int degrees);
+void darkenLightenImage(bool darken);
 
 
 
@@ -27,6 +29,10 @@ int main() {
     cout<<"2-invers image"<<endl;
     cout<<"3-mare image"<<endl;
     cout<<"4-Flip Image"<<endl;
+    cout<<"5-Rotate Image"<<endl;
+    cout<<"6-Lighten and Darken Image"<<endl;
+
+
     cin>>n;
     if(n==1){
         loadImage();
@@ -51,6 +57,24 @@ int main() {
         flibImage();
         saveImage2();
     }
+    if(n==5){
+        int degree=0;
+        loadImage();
+        cout<<"enter rotation degree 90,180,270";
+        cin>>degree;
+        rotateImage(degree);
+        saveImage();
+    }
+    if(n==6){
+        int fac=0;
+        loadImage();
+        cout<<"enter 0 to lighten ,1 to darken"<<endl;
+        cin>>fac;
+        darkenLightenImage(fac? true:false);
+        saveImage();
+    }
+
+    return 0;
 
 
 }
@@ -129,14 +153,68 @@ void  flibImage() {
         for (int j = SIZE; j >0; j--) {
             imag4[i][j]= imag[ 256- i][256-j];
 
-            }
-
-
-
         }
+
+
+
+    }
     for (int i = SIZE; i >0; i--) {
         for (int j = SIZE; j > 0; j--) {
             imag3[i][j] = imag4[i][256 - j];
+        }
+    }
+}
+void rotateImage(int degrees)
+{
+    unsigned char tempImage[SIZE][SIZE];
+    // int degrees=180;
+
+    switch (degrees) {
+        case 90:
+            for (int i = 0; i < SIZE; ++i) {
+                for (int j = 0; j < SIZE; ++j) {
+                    tempImage[i][j] = imag[SIZE - j - 1][i]; // Rotate 90 degrees clockwise
+                }
+            }
+            break;
+
+        case 180:
+            for (int i = 0; i < SIZE; ++i) {
+                for (int j = 0; j < SIZE; ++j) {
+                    tempImage[i][j] = imag[SIZE - i - 1][SIZE - j - 1]; // Rotate 180 degrees
+                }
+            }
+            break;
+
+        case 270:
+            for (int i = 0; i < SIZE; ++i) {
+                for (int j = 0; j < SIZE; ++j) {
+                    tempImage[i][j] = imag[j][SIZE - i - 1]; // Rotate 270 degrees clockwise
+                }
+            }
+            break;
+
+        default:
+            // Invalid input for degrees
+            return;
+    }
+
+    // Copy the temp image back to the original image
+    for (int i = 0; i < SIZE; ++i) {
+        for (int j = 0; j < SIZE; ++j) {
+            imag[i][j] = tempImage[i][j];
+        }
+    }
+}
+void darkenLightenImage(bool darken) {
+    float factor = darken ? 0.5 : 1.5; // Darken by reducing brightness, Lighten by increasing brightness
+
+    for (int i = 0; i < SIZE; ++i) {
+        for (int j = 0; j < SIZE; ++j) {
+            int newValue = imag[i][j] * factor;
+
+            // Ensure the value stays within the valid range [0, 255]
+            imag[i][j] = min(max(newValue, 0), 255);
         }
     }
 }
