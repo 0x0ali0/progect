@@ -5,14 +5,20 @@ using namespace std;
 unsigned char imag[SIZE][SIZE];
 unsigned char imag2[SIZE][SIZE];
 unsigned char imag3[SIZE][SIZE];
+unsigned char imag4[SIZE][SIZE];
+
+
 void loadImage();
 void loadImage2();
 void yourFilter();
 void InvertImage();
 void MergeImages();
 void saveImage();
-void blackAndWhite();
 void saveImage2();
+void blackAndWhite();
+void flibImage();
+
+
 
 int main() {
     int n;
@@ -20,6 +26,7 @@ int main() {
     cout<<"1-black and white"<<endl;
     cout<<"2-invers image"<<endl;
     cout<<"3-mare image"<<endl;
+    cout<<"4-Flip Image"<<endl;
     cin>>n;
     if(n==1){
         loadImage();
@@ -39,7 +46,12 @@ int main() {
 
 
     }
-    return 0;
+    if(n==4){
+        loadImage();
+        flibImage();
+        saveImage2();
+    }
+
 
 }
 void loadImage2() {
@@ -63,6 +75,7 @@ void saveImage(){
     cin>>imageName;
     strcat(imageName,".bmp");
     writeGSBMP(imageName,imag);
+
 
 
 
@@ -93,21 +106,37 @@ void blackAndWhite() {
         }
     }
 }
-    void InvertImage()
-    {
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                imag[i][j]=255-imag[i][j];
-            }
+void InvertImage()
+{
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
+            imag[i][j]=255-imag[i][j];
         }
     }
+}
 void MergeImages(){
 
     for (int i = 0; i < SIZE; i++) {
         for (int j = 0; j < SIZE; j++) {
-          imag3[i][j]=(imag[i][j]+imag2[i][j])/2;
+            imag3[i][j]=(imag[i][j]+imag2[i][j])/2;
 
         }
 
+    }
+}
+void  flibImage() {
+    for (int i = SIZE; i >0; i--) {
+        for (int j = SIZE; j >0; j--) {
+            imag4[i][j]= imag[ 256- i][256-j];
+
+            }
+
+
+
+        }
+    for (int i = SIZE; i >0; i--) {
+        for (int j = SIZE; j > 0; j--) {
+            imag3[i][j] = imag4[i][256 - j];
+        }
     }
 }
