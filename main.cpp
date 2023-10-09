@@ -87,36 +87,34 @@ int main() {
 }
 void loadImage2() {
     char imageName[100];
-    cout << "enter your second image file source";
+    cout << "Enter your second image file source (excluding file extension): ";
     cin >> imageName;
-    strcat(imageName, ".bmp");
-    readGSBMP(imageName, imag2);
+    string imagePath = "in_images/" + string(imageName) + ".bmp";
+    readGSBMP(imagePath.c_str(), imag2);
 }
-void loadImage(){
+
+void loadImage() {
     char imageName[100];
-    cout<<"enter your image file source";
-    cin>>imageName;
-    strcat(imageName,".bmp");
-    readGSBMP(imageName,imag);
-
+    cout << "Enter your image file source (excluding file extension): ";
+    cin >> imageName;
+    string imagePath = "in_images/" + string(imageName) + ".bmp";
+    readGSBMP(imagePath.c_str(), imag);
 }
-void saveImage(){
+
+void saveImage() {
     char imageName[100];
-    cout<<"enter your image name after edit";
-    cin>>imageName;
-    strcat(imageName,".bmp");
-    writeGSBMP(imageName,imag);
-
-
-
-
+    cout << "Enter your image name after edit (excluding file extension): ";
+    cin >> imageName;
+    string imagePath = "out_images/" + string(imageName) + ".bmp";
+    writeGSBMP(imagePath.c_str(), imag);
 }
+
 void saveImage2() {
     char imageName[100];
-    cout << "enter your image name after edit";
+    cout << "Enter your image name after edit (excluding file extension): ";
     cin >> imageName;
-    strcat(imageName, ".bmp");
-    writeGSBMP(imageName,imag3);
+    string imagePath = "out_images/" + string(imageName) + ".bmp";
+    writeGSBMP(imagePath.c_str(), imag3);
 }
 
 // New image will be a black and white version of the original color image.
