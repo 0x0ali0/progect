@@ -27,7 +27,8 @@ void saveImage();
 void saveImage2();
 void blackAndWhite();
 void flipImage();
-void skewImage(int degrees);
+void skewRightImage(int degrees);
+void skewUPImage(int degrees);
 void rotateImage(int degrees);
 void darkenLightenImage(bool darken);
 void shrinkImage(int factor);
@@ -36,46 +37,46 @@ void blurImage();
 
 
 int main() {
-    int n;
+    char n;
     cout<<"Choose the number of filter"<<endl;
     cout<<"1-black and white Image"<<endl;
     cout<<"2-Inverse Image"<<endl;
     cout<<"3-Mare Image"<<endl;
     cout<<"4-Flip Image"<<endl;
-    cout<<"5-Rotate Image"<<endl;
-    cout<<"6-Shrink Image"<<endl;
-    cout<<"7-Blur Image"<<endl;
-    cout<<"8-Skew Image"<<endl;
-    cout<<"9-Darken or Lighten Image"<<endl;
+    cout<<"5-Darken or Lighten Image"<<endl;
+    cout<<"6-Rotate Image"<<endl;
+    cout<<"9-Shrink Image"<<endl;
+    cout<<"c-Blur Image"<<endl;
+    cout<<"e-Skew Image UP"<<endl;
+    cout<<"f-Skew Image RIGHT"<<endl;
+
 
 
 
 
     cin>>n;
-    if(n==1){
+    if(n=='1'){
         loadImage();
         blackAndWhite();
         saveImage();
     }
-    if(n==2){
+    if(n=='2'){
         loadImage();
         InvertImage();
         saveImage();
     }
-    if(n==3){
+    if(n=='3'){
         loadImage();
         loadImage2();
         MergeImages();
         saveImage2();
-
-
     }
-    if(n==4){
+    if(n=='4'){
         loadImage();
         flipImage();
         saveImage2();
     }
-    if(n==5){
+    if(n=='6'){
         int degree=0;
         loadImage();
         cout<<"enter rotation degree 90,180,270";
@@ -83,7 +84,7 @@ int main() {
         rotateImage(degree);
         saveImage();
     }
-    if(n==6){
+    if(n=='5'){
         int fac=0;
         loadImage();
         cout<<"enter 0 to lighten ,1 to darken"<<endl;
@@ -91,7 +92,7 @@ int main() {
         darkenLightenImage(fac? true:false);
         saveImage();
     }
-    if (n == 9) {
+    if (n == '9') {
         int factor = 0;
         loadImage();
         cout << "Enter shrink factor (2, 3, or 4): ";
@@ -103,20 +104,30 @@ int main() {
             cout << "Invalid factor. Please enter 2, 3, or 4." << endl;
         }
     }
-    if(n == 10){
+    if(n == 'f'){
         int degree = 0;
 
         loadImage();
         cout << "Enter skew degrees (e.g., 30): ";
         cin >> degree;
 
-        skewImage(degree);
+        skewRightImage(degree);
         saveImage();
     }
-    if(n==8) {
+    if(n == 'e'){
+        int degree = 0;
+
+        loadImage();
+        cout << "Enter skew degrees (e.g., 30): ";
+        cin >> degree;
+
+        skewUPImage(degree);
+        saveImage();
+    }
+    if(n=='c') {
         loadImage();
         blurImage();
-        saveImage2();
+        saveImage();
 
         return 0;
 
@@ -201,9 +212,11 @@ void  flipImage() {
             imag3[i][j] = imag4[i][256 - j];// Horizontally flipped
         }
     }}
-void skewImage(int degree)  {
+//This function applies a vertically skew filter to a given image.
+//Created by Raghad Thabet 20220912
+void skewRightImage(int degree)  {
     double rad = degree * (22/7) / 180.0;
-    double factor = tan(rad);
+    double factor = -tan(rad);
 
     // Create an empty temporary image
     unsigned char tempImage[SIZE][SIZE] = {0};
@@ -215,7 +228,7 @@ void skewImage(int degree)  {
 
     for (int y = 0; y < SIZE; y++) {
         for (int x = 0; x < SIZE; x++) {
-            int newX = x +(factor * (y - SIZE / 2));
+            int newX = x +(factor * ( y - SIZE / 2 ));
             if (newX >= 0 && newX < SIZE) {
                 tempImage[y][newX] = imag[y][x];
             }
@@ -257,9 +270,6 @@ void rotateImage(int degrees){
             }
             break;
 
-        default:
-            // Invalid input for degrees
-            return;
     }
 
     // Copy the temp image back to the original image
@@ -282,6 +292,8 @@ void darkenLightenImage(bool darken) {
         }
     }
 }
+// The function applies a shrink transformation to the original image
+// Created by Raghad Thabet, 20220912
 void shrinkImage(int fac) {
     int newSize = SIZE /fac;
     unsigned char tempImage[SIZE][SIZE];
@@ -308,11 +320,13 @@ void shrinkImage(int fac) {
         }
     }
 }
+//This function applies a blur effect to a given image
+//Created by Raghad Thabet, 20220912
 void blurImage() {
     unsigned char tempImage[SIZE][SIZE];
     for(int x=0;x<=10;x++){
-        for(int i =1; i<SIZE - 1;i++) {
-            for (int j=1; j<SIZE- 1; j++) {
+        for(int i =0; i<SIZE;i++) {
+            for (int j=0; j<SIZE; j++) {
                 // Calculate average of surrounding pixels (including current pixel)
                 int sum = imag[i-1][j-1] + imag[i-1][j] + imag[i-1][j+1] +
                           imag[i][j-1] + imag[i][j] + imag[i][j+1] +
@@ -320,10 +334,37 @@ void blurImage() {
                 tempImage[i][j]=sum/9;
             }
         }
-        // Cop y the temp image back to the original image
+        // Copy the temp image back to the original image
         for (int i = 0; i < SIZE; ++i) {
             for (int j = 0; j < SIZE; ++j) {
                 imag[i][j] = tempImage[i][j];
             }
         }}
+}
+
+void skewUPImage(int degree) {
+    double rad = degree * (22/7) / 180.0;
+    double factor = tan(rad);
+
+    // Create an empty temporary image
+    unsigned char tempImage[SIZE][SIZE] = {0};
+    for (int i = 0; i < SIZE; ++i) {
+        for (int j = 0; j < SIZE; ++j) {
+            tempImage[i][j] = 255;
+        }
+    }
+
+    for (int y = 0; y < SIZE; ++y) {
+        for (int x = 0; x < SIZE; ++x) {
+            int newY = y + (factor * (x - SIZE / 2));
+            if (newY >= 0 && newY < SIZE) {
+                tempImage[newY][x] = imag[y][x];
+            }
+        }
+    }
+
+    memcpy(imag, tempImage, SIZE * SIZE);
+
+    // Ensure the result is 256x256
+    memcpy(tempImage, imag,SIZE*SIZE);
 }
