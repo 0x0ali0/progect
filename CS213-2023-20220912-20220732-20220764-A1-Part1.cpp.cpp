@@ -301,7 +301,7 @@ void shrinkImage(int fac) {
         for (int j = 0; j<newSize; ++j) {
             int sum=0;
             for (int x=0; x<fac; ++x) {
-                for (int y=0;y <fac; ++y) {
+                for (int y=0; y<fac; ++y) {
                     sum += imag[ i*fac+ x][j*fac + y];
                 }
             }
