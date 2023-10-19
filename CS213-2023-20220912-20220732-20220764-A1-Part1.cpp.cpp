@@ -30,10 +30,12 @@ void flipImage();
 void skewRightImage(int degrees);
 void skewUPImage(int degrees);
 void rotateImage(int degrees);
+void DetectImageEdges();
 void darkenLightenImage(bool darken);
 void shrinkImage(int factor);
+void mirrorImage(string n);
 void blurImage();
-
+void CropImage();
 
 
 int main() {
@@ -45,8 +47,11 @@ int main() {
     cout<<"4-Flip Image"<<endl;
     cout<<"5-Darken or Lighten Image"<<endl;
     cout<<"6-Rotate Image"<<endl;
+    cout<<"7- DetectImageEdges"<<endl;
     cout<<"9-Shrink Image"<<endl;
+    cout<<"a-mirror Image"<<endl;
     cout<<"c-Blur Image"<<endl;
+    cout<<"d-CropImage"<<endl;
     cout<<"e-Skew Image UP"<<endl;
     cout<<"f-Skew Image RIGHT"<<endl;
 
@@ -75,6 +80,13 @@ int main() {
         loadImage();
         flipImage();
         saveImage2();
+    } if(n=='5'){
+        int fac=0;
+        loadImage();
+        cout<<"enter 0 to lighten ,1 to darken"<<endl;
+        cin>>fac;
+        darkenLightenImage(fac? true:false);
+        saveImage();
     }
     if(n=='6'){
         int degree=0;
@@ -84,14 +96,13 @@ int main() {
         rotateImage(degree);
         saveImage();
     }
-    if(n=='5'){
-        int fac=0;
+
+      if(n==7){
         loadImage();
-        cout<<"enter 0 to lighten ,1 to darken"<<endl;
-        cin>>fac;
-        darkenLightenImage(fac? true:false);
-        saveImage();
-    }
+
+          saveImage();
+}
+
     if (n == '9') {
         int factor = 0;
         loadImage();
@@ -103,6 +114,13 @@ int main() {
         } else {
             cout << "Invalid factor. Please enter 2, 3, or 4." << endl;
         }
+    }
+    if(n=='a'){
+        string n;
+        loadImage();
+        mirrorImage(n);
+        saveImage2();
+
     }
     if(n == 'f'){
         int degree = 0;
@@ -116,12 +134,16 @@ int main() {
     }
     if(n == 'e'){
         int degree = 0;
-
         loadImage();
         cout << "Enter skew degrees (e.g., 30): ";
         cin >> degree;
 
         skewUPImage(degree);
+        saveImage();
+    }
+    if(n=='d'){
+        loadImage();
+        CropImage();
         saveImage();
     }
     if(n=='c') {
@@ -367,4 +389,89 @@ void skewUPImage(int degree) {
 
     // Ensure the result is 256x256
     memcpy(tempImage, imag,SIZE*SIZE);
+}void mirrorImage(string n) {
+    cout << "l-for left and r- for right and u for upper and lo for lower";
+    cin >> n;
+    if (n == "l") {
+        for (int i = 0; i < SIZE; ++i) {
+            for (int j = 0; j < SIZE; ++j) {
+                if (j < 127) {
+                    imag3[i][j] = imag[i][j];
+                    imag3[i][j + 127] = imag[i][127 - j];
+                }
+
+            }
+
+        }
+    }
+    if (n == "r") {
+        for (int i = 0; i < SIZE; ++i) {
+            for (int j = 0; j < SIZE; ++j) {
+                if (j > 127) {
+                    imag3[i][j] = imag[i][j];
+                    imag3[i][j - 127] = imag[i][127 - j];
+                }
+
+            }
+
+        }
+    }
+    if (n == "u") {
+        for (int i = 0; i < SIZE; ++i) {
+            for (int j = 0; j < SIZE; ++j) {
+                if (i < 127) {
+                    imag3[i][j] = imag[i][j];
+                    imag3[i + 127][j] = imag[127 - i][j];
+                }
+
+            }
+
+        }
+    }
+    if (n == "lo") {
+        for (int i = 0; i < SIZE; ++i) {
+            for (int j = 0; j < SIZE; ++j) {
+                if (i > 127) {
+                    imag3[i][j] = imag[i][j];
+                    imag3[i][j] = imag[i][j];
+
+                }
+
+            }
+
+        }
+    }
+}
+void DetectImageEdges(){
+
+    for (int i = 0; i < SIZE; ++i) {
+        for (int j = 0; j < SIZE; ++j) {
+            if(imag[i][j]<=imag[i][j+1] + 40 && imag[i][j]>=imag[i][j+1]-120)
+                imag[i][j]=255;
+            else
+                imag[i][j]=0;
+        }
+    }
+}
+void CropImage () {
+    int x,y,w,l;
+    cout<<"enter x , y , m ,l";
+    cin>>x>>y>>w>>l;
+    for (int i = 0; i < SIZE; ++i) {
+        for (int j = 0; j < SIZE; ++j) {
+            if(i<x){
+                imag[i][j]=255;
+            }
+            if(j<y){
+                imag[i][j]=255;
+            }
+            if(i>256-w){
+                imag[i][j]=255;
+            }
+            if(j>256-l){
+                imag[i][j]=255;
+            }
+        }
+    }
+
 }
