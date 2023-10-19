@@ -446,12 +446,12 @@ void skewUPImage(int degree) {
 
         }
     }
-    if (n == "lo") {
-        for (int i = 0; i < SIZE; ++i) {
-            for (int j = 0; j < SIZE; ++j) {
-                if (i > 127) {
-                    imag3[i][j] = imag[i][j];
-                    imag3[i][j] = imag[i][j];
+     if (n == "lo") {
+        for (int i = 0; i < 127; ++i) {
+            for (int j = 0; j < 255; ++j) {
+
+                    imag3[i][j] = imag[255-i][j];
+                    imag3[i+127][j] = imag[i+127][j];
 
                 }
 
@@ -459,7 +459,6 @@ void skewUPImage(int degree) {
 
         }
     }
-}
 void CropImage () {
     int x,y,w,l;
     cout<<"enter x , y , m ,l";
