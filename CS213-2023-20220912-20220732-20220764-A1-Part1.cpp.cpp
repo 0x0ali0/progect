@@ -36,6 +36,8 @@ void shrinkImage(int factor);
 void mirrorImage(string n);
 void blurImage();
 void CropImage();
+void enlargeFilter(int num);
+void shaffleImage(int num);
 
 
 int main() {
@@ -48,6 +50,7 @@ int main() {
     cout<<"5-Darken or Lighten Image"<<endl;
     cout<<"6-Rotate Image"<<endl;
     cout<<"7- DetectImageEdges"<<endl;
+    cout<<"8- DetectImageEdges"<<endl;
     cout<<"9-Shrink Image"<<endl;
     cout<<"a-mirror Image"<<endl;
     cout<<"c-Blur Image"<<endl;
@@ -97,11 +100,18 @@ int main() {
         saveImage();
     }
 
-      if(n==7){
+    if(n=='7'){
         loadImage();
+        DetectImageEdges();
+        saveImage();
+    }
+    if(n=='8'){
+        int num;
+        loadImage();
+        enlargeFilter(num);
+        saveImage2();
 
-          saveImage();
-}
+    }
 
     if (n == '9') {
         int factor = 0;
@@ -120,6 +130,14 @@ int main() {
         loadImage();
         mirrorImage(n);
         saveImage2();
+
+    }
+    if(n=='b'){
+        int num;
+        loadImage();
+        shaffleImage(num);
+        saveImage();
+
 
     }
     if(n == 'f'){
@@ -442,17 +460,6 @@ void skewUPImage(int degree) {
         }
     }
 }
-void DetectImageEdges(){
-
-    for (int i = 0; i < SIZE; ++i) {
-        for (int j = 0; j < SIZE; ++j) {
-            if(imag[i][j]<=imag[i][j+1] + 40 && imag[i][j]>=imag[i][j+1]-120)
-                imag[i][j]=255;
-            else
-                imag[i][j]=0;
-        }
-    }
-}
 void CropImage () {
     int x,y,w,l;
     cout<<"enter x , y , m ,l";
@@ -474,4 +481,162 @@ void CropImage () {
         }
     }
 
+}
+//this filter copy one pixel to 4 picxel and jump to next odd pixel.
+void enlargeFilter(int num) {
+    cout << "1" << "|" << "2" << endl;
+    cout << "--" << "--" << endl;
+    cout << "3" << "|" << "4" << endl;
+    cout << "enter number of part you want to large" << endl;
+    cin >> num;
+    if (num == 1) {
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                if (i < 127 && j < 127) {
+                    imag3[(i * 2 - 1)][(j * 2 - 1)] = imag[i][j];
+                    imag3[(i * 2 - 1) + 1][(j * 2 - 1)] = imag[i][j];
+                    imag3[(i * 2 - 1)][(j * 2 - 1) + 1] = imag[i][j];
+                    imag3[(i * 2 - 1) + 1][(j * 2 - 1) + 1] = imag[i][j];
+                }
+            }
+        }
+    }
+    if (num == 2) {
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                if (i < 127 && j > 127) {
+                    imag3[(i * 2 - 1)][(j * 2 - 1)] = imag[i + 127][j];
+                    imag3[(i * 2 - 1) + 1][(j * 2 - 1)] = imag[i + 127][j];
+                    imag3[(i * 2 - 1)][(j * 2 - 1) + 1] = imag[i + 127][j];
+                    imag3[(i * 2 - 1) + 1][(j * 2 - 1) + 1] = imag[i + 127][j];
+                }
+            }
+        }
+    }
+
+    if (num == 3) {
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                if (i < 127 && j < 127) {
+                    imag3[(i * 2 - 1)][(j * 2 - 1)] = imag[i + 127][j];
+                    imag3[(i * 2 - 1) + 1][(j * 2 - 1)] = imag[i + 127][j];
+                    imag3[(i * 2 - 1)][(j * 2 - 1) + 1] = imag[i + 127][j];
+                    imag3[(i * 2 - 1) + 1][(j * 2 - 1) + 1] = imag[i + 127][j];
+                }
+            }
+        }
+    }
+
+    if (num == 4) {
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                if (i < 127 && j > 127) {
+                    imag3[(i * 2 - 1)][(j * 2 - 1)] = imag[i + 127][j];
+                    imag3[(i * 2 - 1) + 1][(j * 2 - 1)] = imag[i + 127][j];
+                    imag3[(i * 2 - 1)][(j * 2 - 1) + 1] = imag[i + 127][j];
+                    imag3[(i * 2 - 1) + 1][(j * 2 - 1) + 1] = imag[i + 127][j];
+                }
+            }
+        }
+    }
+}
+void shaffleImage(int num) {
+    cout << "1" << "|" << "2" << endl;
+    cout << "--" << "--" << endl;
+    cout << "3" << "|" << "4" << endl;
+    cout << "inter the order for the part of image [1,2,3,4]";
+    unsigned char first[128][128];
+    unsigned char second[128][128];
+    unsigned char third[128][128];
+    unsigned char forth[128][128];
+    int arr[4];
+    for (int i = 0; i < 4; ++i) {
+        cout << "Enter quarters order: ";
+        cin >> arr[i];
+    }
+    for (int i = 0; i < 128; ++i) {
+        for (int j = 0; j < 128; ++j) {
+            first[i][j] = imag[i][j];
+            second[i][j] = imag[i][j + 127];
+            third[i][j] = imag[i + 127][j];
+            forth[i][j] = imag[i + 127][j + 127];
+        }
+    }
+    for (int i = 0; i < 128; ++i) {
+        for (int j = 0; j < 128; ++j) {
+            switch (arr[0]) {
+                case 1:
+                    imag[i][j]=first[i][j];
+                    break;
+                case 2:
+                    imag[i][j]=second[i][j];
+                    break;
+                case 3:
+                    imag[i][j]=third[i][j];
+                    break;
+                case 4:
+                    imag[i][j]=forth[i][j];
+                    break;
+
+            }
+
+            switch (arr[1]) {
+                case 1:
+                    imag[i][j + 128]=first[i][j+128];
+                    break;
+                case 2:
+                    imag[i][j + 128] = second[i][j+128];
+                    break;
+                case 3:
+                    imag[i][j + 128] = third[i][j+128];
+                    break;
+                case 4:
+                    imag[i][j + 128] = forth[i][j+128];
+                    break;
+            }
+
+            switch (arr[2]) {
+                case 1:
+                    imag[i+128][j] = first[i][j];
+                    break;
+                case 2:
+                    imag[i+128][j] = second[i][j];
+                    break;
+                case 3:
+                    imag[i+128][j] = third[i][j];
+                    break;
+                case 4:
+                    imag[i+128][j] = forth[i][j];
+                    break;
+            }
+
+            switch (arr[3]) {
+                case 1:
+                    imag[i + 128][j+128] = first[i][j];
+                    break;
+                case 2:
+                    imag[i + 128][j + 128] = second[i][j];
+                    break;
+                case 3:
+                    imag[i + 128][j + 128] = third[i][j];
+                    break;
+                case 4:
+                    imag[i + 128][j + 128] = forth[i][j];
+                    break;
+            }
+        }
+    }
+
+}
+void DetectImageEdges(){
+    for (int i = 0; i <SIZE; ++i) {
+        for (int j = 0; j <SIZE; ++j) {
+            if(imag[i][j]<=imag[i][j+1]+30&&imag[i][j]>=imag[i][j+1]-90&&imag[i][j]<=imag[i+1][j]+30&&imag[i][j]>=imag[i+1][j]-90){
+                imag[i][j]=255;
+            }
+            else{
+                imag[i][j]=0;
+            }
+        }
+    }
 }
